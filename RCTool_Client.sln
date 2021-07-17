@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30611.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RCTool_Client", "RCTool_Client\RCTool_Client.csproj", "{3EECC442-48BF-4C63-AAFD-54CDC39ECEAD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3EECC442-48BF-4C63-AAFD-54CDC39ECEAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EECC442-48BF-4C63-AAFD-54CDC39ECEAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EECC442-48BF-4C63-AAFD-54CDC39ECEAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EECC442-48BF-4C63-AAFD-54CDC39ECEAD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A6EB9A30-36E3-42CC-AA53-249C9414C36F}
+	EndGlobalSection
+EndGlobal
