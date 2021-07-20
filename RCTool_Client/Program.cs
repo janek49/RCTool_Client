@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic.Devices;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Net;
@@ -8,13 +9,16 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using AForge.Video.DirectShow;
 using RCTool_Client.Packet.Inbound;
 using RCTool_Client.Packet.Outbound;
+using RCTool_Client.Webcam;
 
 namespace RCTool_Client
 {
     static class Program
     {
+        static PictureBox box = new PictureBox();
         /// <summary>
         /// Główny punkt wejścia dla aplikacji.
         /// </summary>
@@ -35,6 +39,13 @@ namespace RCTool_Client
                 Console.WriteLine("[Connection lost]");
                 Thread.Sleep(new Random().Next(1000, 3000));
             }
+        }
+
+
+
+        private static void VideoSource_NewFrame(object sender, AForge.Video.NewFrameEventArgs eventArgs)
+        {
+            box.Invoke((MethodInvoker)(() => box.Image = new Bitmap(eventArgs.Frame)));
         }
 
         public static void OpenConnectionToServer()
@@ -70,6 +81,16 @@ namespace RCTool_Client
                             (new ComputerInfo().TotalPhysicalMemory / (Math.Pow(1024, 3))) + 0.5)),
                         Language = CultureInfo.InstalledUICulture.EnglishName
                     });
+                }
+                
+            }
+
+            if (packet is InboundPacket01OpenSocket ip01os)
+            {
+                if (ip01os.ConnectionType == 3)
+                {
+                    WebcamConnector wc = new WebcamConnector(scon.Ip, scon.Port, ip01os.Uuid);
+                    wc.Connect();
                 }
             }
         }

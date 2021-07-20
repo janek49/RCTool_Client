@@ -35,6 +35,18 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AForge, Version=2.2.5.0, Culture=neutral, PublicKeyToken=c1db6ff4eaa06aeb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\pl\AForge.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Video, Version=2.2.5.0, Culture=neutral, PublicKeyToken=cbfb6e07d173c401, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\pl\AForge.Video.dll</HintPath>
+    </Reference>
+    <Reference Include="AForge.Video.DirectShow, Version=2.2.5.0, Culture=neutral, PublicKeyToken=61ea4348d43881b7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\pl\AForge.Video.DirectShow.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -48,6 +60,7 @@
     <Compile Include="PacketHandler.cs" />
     <Compile Include="Packet\Inbound\InboudPacket00RequestData.cs" />
     <Compile Include="Packet\Inbound\InboundPacket.cs" />
+    <Compile Include="Packet\Inbound\InboundPacket01OpenSocket.cs" />
     <Compile Include="Packet\Outbound\OutboundPacket.cs" />
     <Compile Include="Packet\Outbound\OutboundPacket00KeepAlive.cs" />
     <Compile Include="Packet\Outbound\OutboundPacket01Identify.cs" />
@@ -56,6 +69,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerConnection.cs" />
+    <Compile Include="Webcam\OutboundPacket03WebCam.cs" />
+    <Compile Include="Webcam\WebcamConnector.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

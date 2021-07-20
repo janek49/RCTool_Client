@@ -13,7 +13,8 @@ namespace RCTool_Client
 
         private readonly Dictionary<short, Type> _inboudPackeTypeDictionary = new Dictionary<short, Type>
         {
-            {0,typeof(InboudPacket00RequestData)}
+            {0,typeof(InboudPacket00RequestData)},
+            {1, typeof(InboundPacket01OpenSocket)}
         };
 
         public delegate void OnPacketReceived(ServerConnection scon, InboundPacket packet);
