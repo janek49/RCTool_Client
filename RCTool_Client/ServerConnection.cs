@@ -32,7 +32,7 @@ namespace RCTool_Client
                             Socket.Send(message);
 
                             Thread.Sleep(10);
-                            Console.WriteLine("Sent Message: " + Encoding.ASCII.GetString(message));
+                           // Console.WriteLine("Sent Message: " + Encoding.ASCII.GetString(message));
                         }
                     }
                 }

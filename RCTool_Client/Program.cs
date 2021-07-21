@@ -69,7 +69,7 @@ namespace RCTool_Client
 
         private static void PacketHandler_OnPacketReceivedEvent(ServerConnection scon, InboundPacket packet)
         {
-            if (packet is InboudPacket00RequestData requestData)
+            if (packet is InboundPacket00RequestData requestData)
             {
                 if (requestData.RequestedDataType == 0)
                 {

@@ -13,8 +13,9 @@ namespace RCTool_Client
 
         private readonly Dictionary<short, Type> _inboudPackeTypeDictionary = new Dictionary<short, Type>
         {
-            {0,typeof(InboudPacket00RequestData)},
-            {1, typeof(InboundPacket01OpenSocket)}
+            {0,typeof(InboundPacket00RequestData)},
+            {1, typeof(InboundPacket01OpenSocket)},
+            {2, typeof(InboundPacket02WebCam)}
         };
 
         public delegate void OnPacketReceived(ServerConnection scon, InboundPacket packet);
@@ -37,7 +38,7 @@ namespace RCTool_Client
                 if (!_inboudPackeTypeDictionary.ContainsKey(packetId))
                     throw new InvalidOperationException("Invalid packet id: " + packetId);
 
-                InboundPacket packet = (InboundPacket) Activator.CreateInstance(_inboudPackeTypeDictionary[packetId]);
+                InboundPacket packet = (InboundPacket)Activator.CreateInstance(_inboudPackeTypeDictionary[packetId]);
                 packet.ReadPacket(reader);
 
                 OnPacketReceivedEvent?.Invoke(ServerConnection, packet);
@@ -53,7 +54,31 @@ namespace RCTool_Client
                     wr.Write(packet.PacketId);
                     packet.WritePacket(wr);
                 }
-                ServerConnection.SendMessageRaw(ms.ToArray());
+                byte[] bytes = ms.ToArray();
+
+                if (bytes.Length > 8192)
+                    SplitAndSendBytes(bytes, 4096);
+                else
+                    ServerConnection.SendMessageRaw(bytes);
+            }
+        }
+
+        private void SplitAndSendBytes(byte[] bytes, int chunkSize)
+        {
+            string uuid = Guid.NewGuid().ToString();
+            int parts = (int)Math.Ceiling((double)bytes.Length / (double)chunkSize);
+            int cpart = 1;
+            foreach (var chunk in Util.Slices(bytes, chunkSize))
+            {
+                OutboundPacket999MultiPacket opm = new OutboundPacket999MultiPacket
+                {
+                    Buffer = chunk,
+                    BufferSize = chunk.Length,
+                    ChunkAmount = parts,
+                    ChunkIndex = cpart++,
+                    PacketUuid = uuid
+                };
+                SendPacket(opm);
             }
         }
     }

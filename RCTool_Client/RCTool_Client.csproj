@@ -58,17 +58,21 @@
   <ItemGroup>
     <Compile Include="NetUtil.cs" />
     <Compile Include="PacketHandler.cs" />
-    <Compile Include="Packet\Inbound\InboudPacket00RequestData.cs" />
+    <Compile Include="Packet\Inbound\InboundPacket00RequestData.cs" />
     <Compile Include="Packet\Inbound\InboundPacket.cs" />
     <Compile Include="Packet\Inbound\InboundPacket01OpenSocket.cs" />
+    <Compile Include="Packet\Inbound\InboundPacket02WebCam.cs" />
     <Compile Include="Packet\Outbound\OutboundPacket.cs" />
     <Compile Include="Packet\Outbound\OutboundPacket00KeepAlive.cs" />
     <Compile Include="Packet\Outbound\OutboundPacket01Identify.cs" />
     <Compile Include="Packet\Outbound\OutboundPacket02DataResponse.cs" />
     <Compile Include="Packet\Outbound\OutboundPacket02DataResponse_ClientListInfo.cs" />
+    <Compile Include="Packet\Outbound\OutboundPacket04ChunkTransfer.cs" />
+    <Compile Include="Packet\Outbound\OutboundPacket999MultiPacket.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerConnection.cs" />
+    <Compile Include="Util.cs" />
     <Compile Include="Webcam\OutboundPacket03WebCam.cs" />
     <Compile Include="Webcam\WebcamConnector.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

@@ -5,11 +5,11 @@ using System.Text;
 
 namespace RCTool_Client.Packet.Inbound
 {
-    public class InboudPacket00RequestData : InboundPacket
+    public class InboundPacket00RequestData : InboundPacket
     {
         public short RequestedDataType;
 
-        public InboudPacket00RequestData() : base(0)
+        public InboundPacket00RequestData() : base(0)
         {
         }
 
