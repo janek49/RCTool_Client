@@ -15,7 +15,8 @@ namespace RCTool_Client
         {
             {0,typeof(InboundPacket00RequestData)},
             {1, typeof(InboundPacket01OpenSocket)},
-            {2, typeof(InboundPacket02WebCam)}
+            {2, typeof(InboundPacket02WebCam)},
+            {3, typeof(InboundPacket03FileOperation)}
         };
 
         public delegate void OnPacketReceived(ServerConnection scon, InboundPacket packet);

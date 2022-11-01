@@ -32,7 +32,7 @@ namespace RCTool_Client
                             Socket.Send(message);
 
                             Thread.Sleep(10);
-                           // Console.WriteLine("Sent Message: " + Encoding.ASCII.GetString(message));
+                            // Console.WriteLine("Sent Message: " + Encoding.ASCII.GetString(message));
                         }
                     }
                 }
@@ -57,7 +57,17 @@ namespace RCTool_Client
                             continue;
 
                         byte[] message = ReceiveMessageBytes();
-                        new Thread(() => PacketHandler.HandleIncomingRawPacket(message)).Start();
+                        new Thread(() =>
+                        {
+                            try
+                            {
+                                PacketHandler.HandleIncomingRawPacket(message);
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine(ex);
+                            }
+                        }).Start();
                     }
                 }
                 catch (Exception e)

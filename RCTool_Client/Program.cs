@@ -84,8 +84,7 @@ namespace RCTool_Client
                 }
                 
             }
-
-            if (packet is InboundPacket01OpenSocket ip01os)
+            else if (packet is InboundPacket01OpenSocket ip01os)
             {
                 if (ip01os.ConnectionType == 3)
                 {
@@ -93,6 +92,15 @@ namespace RCTool_Client
                     wc.Connect();
                 }
             }
+            else if(packet is InboundPacket03FileOperation pf)
+            {
+                if(pf.Operation == InboundPacket03FileOperation.EnumOperation.LIST_DIR_CONTENT)
+                {
+                    string dir = pf.FileSystemPath;
+                    scon.PacketHandler.SendPacket(new OutboundPacket05DirectoryList(dir));
+                }
+            }
+
         }
 
     }
